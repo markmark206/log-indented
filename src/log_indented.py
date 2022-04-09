@@ -99,7 +99,7 @@ def log_error(*args) -> None:
     IndentedLog.error(True, *args)
 
 
-class WithLog:
+class LoggedBlock:
     def __init__(self, name, flogger=default_logger):
         self.start_time: float = 0
         self.name: str = name
@@ -131,7 +131,7 @@ def logged(flogger=default_logger):
         @wraps(function)
         def wrapper(*args, **kwargs):
             """Logs the timing for a function."""
-            with WithLog(function.__qualname__, flogger):
+            with LoggedBlock(function.__qualname__, flogger):
                 ret = function(*args, **kwargs)
             return ret
 
