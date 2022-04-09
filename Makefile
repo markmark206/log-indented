@@ -1,5 +1,7 @@
 .PHONY: test sdist bdist_wheel_linux bdist_windows
 
+MIN_COVERAGE_PERCENTAGE=92
+
 VENV_PATH=${PWD}/.py-env
 
 clean:
@@ -9,13 +11,21 @@ build:
 	echo "TODO: build"
 
 test:
-	python -m unittest discover src '*_test.py' --locals -v
+	coverage erase
+	coverage run -m unittest discover src '*_test.py' --locals -v
+	coverage report -m --fail-under $(MIN_COVERAGE_PERCENTAGE)
 
 format:
 	black src --line-length 140 
 
 
 lint:
+	black --check src --line-length 140
+	# stop the build if there are Python syntax errors or undefined names.
+	flake8 src --count --select=E9,F63,F7,F82 --show-source --statistics
+	# exit-zero treats all errors as warnings.
+	flake8 src --count --exit-zero --max-complexity=10 --max-line-length=140 --statistics
+	# run pylint
 	pylint -j 0 src
 
 env:
