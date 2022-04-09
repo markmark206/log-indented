@@ -12,21 +12,21 @@ build:
 
 test:
 	coverage erase
-	coverage run -m unittest discover src '*_test.py' --locals -v
+	coverage run -m unittest discover log_indented '*_test.py' --locals -v
 	coverage report -m --fail-under $(MIN_COVERAGE_PERCENTAGE)
 
 format:
-	black src --line-length 140 
+	black log_indented --line-length 140 
 
 
 lint:
-	black --check src --line-length 140
+	black --check log_indented --line-length 140
 	# stop the build if there are Python syntax errors or undefined names.
-	flake8 src --count --select=E9,F63,F7,F82 --show-source --statistics
+	flake8 log_indented --count --select=E9,F63,F7,F82 --show-source --statistics
 	# exit-zero treats all errors as warnings.
-	flake8 src --count --exit-zero --max-complexity=10 --max-line-length=140 --statistics
+	flake8 log_indented --count --exit-zero --max-complexity=10 --max-line-length=140 --statistics
 	# run pylint
-	pylint -j 0 src
+	pylint -j 0 log_indented
 
 env:
 	@python3.9 -m venv $(VENV_PATH) --prompt "🟢"
@@ -42,4 +42,5 @@ install-dependencies:
 	    pip install -r requirements.txt
 
 
-
+sdist:
+	python setup.py sdist
