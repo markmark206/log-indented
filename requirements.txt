@@ -14,12 +14,16 @@ click==8.1.2
     #   pip-tools
 coverage==6.2
     # via -r requirements.in
+flake8==4.0.1
+    # via -r requirements.in
 isort==5.10.1
     # via pylint
 lazy-object-proxy==1.7.1
     # via astroid
 mccabe==0.6.1
-    # via pylint
+    # via
+    #   flake8
+    #   pylint
 mypy-extensions==0.4.3
     # via black
 pathspec==0.9.0
@@ -32,6 +36,10 @@ platformdirs==2.5.1
     # via
     #   black
     #   pylint
+pycodestyle==2.8.0
+    # via flake8
+pyflakes==2.4.0
+    # via flake8
 pylint==2.12.2
     # via -r requirements.in
 toml==0.10.2
