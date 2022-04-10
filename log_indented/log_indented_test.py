@@ -24,6 +24,36 @@ def f_level_4_with():
 
 
 @logged(logger)
+def count_chicken() -> int:
+    return 3
+
+
+@logged(logger)
+def count_ducks() -> int:
+    return 7
+
+
+@logged(logger)
+def count_birds() -> int:
+    return count_chicken() + count_ducks()
+
+
+@logged(logger)
+def count_goats() -> int:
+    return 7
+
+
+@logged(logger)
+def count_sheep() -> int:
+    return 0
+
+
+@logged(logger)
+def count_barnyard_animinals() -> int:
+    return count_birds() + count_goats() + count_sheep()
+
+
+@logged(logger)
 def compute_the_answer() -> int:
     for i in range(10):
         time.sleep(0.2)
@@ -65,6 +95,29 @@ class TestLogIndented(unittest.TestCase):
                 "      TestLogIndented._f_level_2: level 3: exit",
                 "    - TestLogIndented._f_level_2: exit. took ",
                 "- TestLogIndented._f_level_1: exit. took ",
+            ],
+            captured=captured,
+        )
+
+    @logged(logger)
+    def test_count_animals(self):
+        with self.assertLogs() as captured:
+            animal_count: int = count_barnyard_animinals()
+            self.assertEqual(animal_count, 17)
+        self._validate_captured_logs(
+            expected_lines=[
+                "    + count_barnyard_animinals: enter",
+                "        + count_birds: enter",
+                "            + count_chicken: enter",
+                "            - count_chicken: exit. took ",
+                "            + count_ducks: enter",
+                "            - count_ducks: exit. took ",
+                "        - count_birds: exit. took ",
+                "        + count_goats: enter",
+                "        - count_goats: exit. took ",
+                "        + count_sheep: enter",
+                "        - count_sheep: exit. took ",
+                "    - count_barnyard_animinals: exit. took ",
             ],
             captured=captured,
         )

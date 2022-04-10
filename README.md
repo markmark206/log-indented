@@ -6,26 +6,54 @@ This is a package for producing indented, easy to understand logs.
 
 Example:
 
-Executing compute_the_answer()
+Executing count_barnyard_animinals() in this code example:
 
 ```python
 from log_indented import logged, log_info
 
-@logged
-def compute_the_answer() -> int:
-    for i in range(10):
-        time.sleep(0.2)
-        log_info(f"{i}, computing the answer")
-    return 42
+@logged(logger)
+def count_chicken() -> int:
+    return 3
+
+
+@logged(logger)
+def count_ducks() -> int:
+    return 7
+
+
+@logged(logger)
+def count_birds() -> int:
+    return count_chicken() + count_ducks()
+
+
+@logged(logger)
+def count_goats() -> int:
+    return 7
+
+
+@logged(logger)
+def count_sheep() -> int:
+    return 0
+
+
+@logged(logger)
+def count_barnyard_animinals() -> int:
+    return count_birds() + count_goats() + count_sheep()
 ```
 
 will produce output similar to this:
 
 ```
-    + compute_the_answer: enter
-      compute_the_answer: 0, computing the answer
-      compute_the_answer: 1, computing the answer
-      ...
-      compute_the_answer: 9, computing the answer
-    - compute_the_answer: exit. took 2,558.9 ms.
+    + count_barnyard_animinals: enter
+        + count_birds: enter
+            + count_chicken: enter
+            - count_chicken: exit. took 500.9 ms.
+            + count_ducks: enter
+            - count_ducks: exit. took 501.0 ms.
+        - count_birds: exit. took 501.0 ms.
+        + count_goats: enter
+        - count_goats: exit. took 501.0 ms.
+        + count_sheep: enter
+        - count_sheep: exit. took 501.1 ms.
+    - count_barnyard_animinals: exit. took 501.1 ms.
 ```
