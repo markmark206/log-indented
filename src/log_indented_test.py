@@ -1,4 +1,5 @@
 import unittest
+from unittest._log import _LoggingWatcher
 import sys
 import time
 
@@ -10,13 +11,13 @@ logger = logging.getLogger(__name__)
 logger.level = logging.DEBUG
 
 
-def f_level_3():
+def f_level_3() -> None:
     log_info("level 3: enter")
     f_level_4_with()
     log_info("level 3: exit")
 
 
-def f_level_4_with():
+def f_level_4_with() -> None:
     with LoggedBlock("with logged block level 4", logger):
         log_info("inside logged block level 4")
         logger.info("just a regular log")
@@ -64,21 +65,21 @@ def compute_the_answer() -> int:
 
 class TestLogIndented(unittest.TestCase):
     @logged(logger)
-    def _f_level_2(self):
+    def _f_level_2(self) -> None:
         log_info("level 2")
         f_level_3()
         # pylint: disable=redundant-unittest-assert
         self.assertTrue(True)
 
     @logged(logger)
-    def _f_level_1(self):
+    def _f_level_1(self) -> None:
         log_info("level 1")
         self._f_level_2()
         # pylint: disable=redundant-unittest-assert
         self.assertTrue(True)
 
     @logged(logger)
-    def test_basic(self):
+    def test_basic(self) -> None:
         with self.assertLogs() as captured:
             self._f_level_1()
 
@@ -101,7 +102,7 @@ class TestLogIndented(unittest.TestCase):
         )
 
     @logged(logger)
-    def test_count_animals(self):
+    def test_count_animals(self) -> None:
         with self.assertLogs() as captured:
             animal_count: int = count_barnyard_animinals()
             self.assertEqual(animal_count, 17)
@@ -125,7 +126,7 @@ class TestLogIndented(unittest.TestCase):
         )
 
     @logged(logger)
-    def test_important_computation(self):
+    def test_important_computation(self) -> None:
         with self.assertLogs() as captured:
             the_answer: int = compute_the_answer()
             self.assertEqual(the_answer, 42)
@@ -150,14 +151,14 @@ class TestLogIndented(unittest.TestCase):
 
         # self._validate_captured_logs(expected_lines, captured)
 
-    def _validate_captured_logs(self, expected_lines: list[str], captured):
+    def _validate_captured_logs(self, expected_lines: list[str], captured: _LoggingWatcher) -> None:
         self.assertEqual(len(captured.records), len(expected_lines))
         for index, expected_string in enumerate(expected_lines):
             self.assertIn(expected_string, captured.records[index].getMessage())
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.stream_handler = logging.StreamHandler(sys.stdout)
         logger.addHandler(self.stream_handler)
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         logger.removeHandler(self.stream_handler)

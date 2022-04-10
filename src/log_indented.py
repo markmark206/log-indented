@@ -1,7 +1,7 @@
 """
 Basic logging module.
 """
-from typing import Any, Literal, Optional, Tuple, Type
+from typing import Any, Callable, cast, TypeVar, Literal, Optional, Tuple, Type
 import time
 from functools import wraps
 import logging
@@ -106,7 +106,7 @@ class LoggedBlock:
         self.name: str = name
         self.logger: logging.Logger = flogger
 
-    def __enter__(self):
+    def __enter__(self):  # type: ignore
         IndentedLog.indentations.push_logger(self.logger, self.name)
         IndentedLog.info(False, f"{PREFIX_ENTER}{self.name}: enter")
         # self.logger.info(self.name + ": enter")
@@ -130,15 +130,19 @@ class LoggedBlock:
         return time.time() - self.start_time
 
 
-def logged(flogger=default_logger):
-    def decorate(function):
+# pylint: disable=invalid-name
+F = TypeVar("F", bound=Callable[..., Any])
+
+
+def logged(flogger: logging.Logger = default_logger) -> Callable[[F], F]:
+    def decorate(function: F) -> F:
         @wraps(function)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
             """Logs the timing for a function."""
             with LoggedBlock(function.__qualname__, flogger):
                 ret = function(*args, **kwargs)
             return ret
 
-        return wrapper
+        return cast(F, wrapper)
 
     return decorate
