@@ -50,7 +50,9 @@ def count_sheep() -> int:
 
 @logged(logger)
 def count_barnyard_animinals() -> int:
-    return count_birds() + count_goats() + count_sheep()
+    total_animal_count: int = count_birds() + count_goats() + count_sheep()
+    log_info(f"total barnyard animals: {total_animal_count}")
+    return total_animal_count
 
 
 @logged(logger)
@@ -117,6 +119,7 @@ class TestLogIndented(unittest.TestCase):
                 "        - count_goats: exit. took ",
                 "        + count_sheep: enter",
                 "        - count_sheep: exit. took ",
+                "      count_barnyard_animinals: total barnyard animals: 17",
                 "    - count_barnyard_animinals: exit. took ",
             ],
             captured=captured,
