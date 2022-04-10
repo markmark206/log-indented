@@ -1,11 +1,12 @@
 """
 Basic logging module.
 """
-from typing import Tuple
+from typing import Any, Callable, cast, TypeVar, Literal, Optional, Tuple, Type
 import time
 from functools import wraps
 import logging
 import threading
+from types import TracebackType
 
 default_logger: logging.Logger = logging.getLogger(__name__)
 
@@ -15,8 +16,8 @@ PREFIX_MESSAGE: str = "  "
 
 
 class Indentations:
-    def __init__(self):
-        self.indents: dict[int, list] = {}
+    def __init__(self) -> None:
+        self.indents: dict[int, list[Tuple[logging.Logger, str]]] = {}
         self.lock: threading.Lock = threading.Lock()
 
     def push_logger(self, logger: logging.Logger, name: str) -> None:
@@ -55,7 +56,7 @@ class IndentedLog:
     indentations: Indentations = Indentations()
 
     @staticmethod
-    def prepare_compose_log(with_prefix: bool, *args) -> Tuple[str, logging.Logger]:
+    def prepare_compose_log(with_prefix: bool, *args: Any) -> Tuple[str, logging.Logger]:
         indent_level, logger_to_user, name = IndentedLog.indentations.get_indent_and_logger()
 
         string_to_log: str = PREFIX_MESSAGE if with_prefix else ""
@@ -72,47 +73,49 @@ class IndentedLog:
         IndentedLog.indentations.push_logger(slogger, name)
 
     @staticmethod
-    def info(with_prefix: bool, *args) -> None:
+    def info(with_prefix: bool, *args: Any) -> None:
         log_string, logger_to_use = IndentedLog.prepare_compose_log(with_prefix, *args)
         logger_to_use.info(log_string)
 
     @staticmethod
-    def warning(with_prefix: bool, *args) -> None:
+    def warning(with_prefix: bool, *args: Any) -> None:
         log_string, logger_to_use = IndentedLog.prepare_compose_log(with_prefix, *args)
         logger_to_use.warning(log_string)
 
     @staticmethod
-    def error(with_prefix: bool, *args) -> None:
+    def error(with_prefix: bool, *args: Any) -> None:
         log_string, logger_to_use = IndentedLog.prepare_compose_log(with_prefix, *args)
         logger_to_use.error(log_string)
 
 
-def log_info(*args) -> None:
+def log_info(*args: Any) -> None:
     IndentedLog.info(True, *args)
 
 
-def log_warn(*args) -> None:
+def log_warn(*args: Any) -> None:
     IndentedLog.warning(True, *args)
 
 
-def log_error(*args) -> None:
+def log_error(*args: Any) -> None:
     IndentedLog.error(True, *args)
 
 
 class LoggedBlock:
-    def __init__(self, name, flogger=default_logger):
+    def __init__(self, name: str, flogger: logging.Logger = default_logger) -> None:
         self.start_time: float = 0
         self.name: str = name
-        self.logger = flogger
+        self.logger: logging.Logger = flogger
 
-    def __enter__(self):
+    def __enter__(self):  # type: ignore
         IndentedLog.indentations.push_logger(self.logger, self.name)
         IndentedLog.info(False, f"{PREFIX_ENTER}{self.name}: enter")
         # self.logger.info(self.name + ": enter")
         self.start_time = int(time.time())
         return self
 
-    def __exit__(self, exc_type, exc_value, exc_tb):
+    def __exit__(
+        self, exc_type: Optional[Type[BaseException]], exc_value: Optional[BaseException], exc_tb: Optional[TracebackType]
+    ) -> Literal[False]:
         duration: float = self.since_start() * 1000.0
         exception_text: str = f"exception: '{exc_type}' - '{exc_value}'" if exc_value else ""
         message_str: str = f"{PREFIX_EXIT}{self.name}: exit. took {duration:,.1f} ms. {exception_text}"
@@ -121,20 +124,25 @@ class LoggedBlock:
         else:
             IndentedLog.info(False, message_str)
         IndentedLog.indentations.pop_logger()
+        return False
 
     def since_start(self) -> float:
         return time.time() - self.start_time
 
 
-def logged(flogger=default_logger):
-    def decorate(function):
+# pylint: disable=invalid-name
+F = TypeVar("F", bound=Callable[..., Any])
+
+
+def logged(flogger: logging.Logger = default_logger) -> Callable[[F], F]:
+    def decorate(function: F) -> F:
         @wraps(function)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
             """Logs the timing for a function."""
             with LoggedBlock(function.__qualname__, flogger):
                 ret = function(*args, **kwargs)
             return ret
 
-        return wrapper
+        return cast(F, wrapper)
 
     return decorate
