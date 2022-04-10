@@ -4,8 +4,7 @@ import time
 
 import logging
 
-# pylint: disable=no-name-in-module
-from log_indented import logged, log_info, LoggedBlock
+from src.log_indented import logged, log_info, LoggedBlock
 
 logger = logging.getLogger(__name__)
 logger.level = logging.DEBUG
