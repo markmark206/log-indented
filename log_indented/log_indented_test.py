@@ -5,7 +5,8 @@ import time
 
 import logging
 
-from src.log_indented.log_indented import logged, log_info, LoggedBlock
+# pylint: disable=no-name-in-module
+from log_indented import logged, log_info, LoggedBlock  # type: ignore
 
 logger = logging.getLogger(__name__)
 logger.level = logging.DEBUG
@@ -58,7 +59,7 @@ def count_barnyard_animinals() -> int:
 @logged(logger)
 def compute_the_answer() -> int:
     for i in range(10):
-        time.sleep(0.2)
+        time.sleep(0.1)
         log_info(f"{i}, computing the answer")
     return 42
 
