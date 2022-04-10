@@ -5,7 +5,7 @@ import time
 
 import logging
 
-from src.log_indented import logged, log_info, LoggedBlock
+from src.log_indented.log_indented import logged, log_info, LoggedBlock
 
 logger = logging.getLogger(__name__)
 logger.level = logging.DEBUG
