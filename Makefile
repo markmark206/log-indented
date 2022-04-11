@@ -12,7 +12,7 @@ build:
 
 test:
 	coverage erase
-	coverage run -m unittest discover src/log_indented '*_test.py' --locals -v
+	coverage run -m unittest discover src/log_indented/ '*_test.py' --locals -v
 	coverage report -m --fail-under $(MIN_COVERAGE_PERCENTAGE)
 
 format:
