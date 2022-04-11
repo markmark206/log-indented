@@ -8,6 +8,8 @@ astroid==2.9.3
     # via pylint
 black==22.3.0
     # via -r requirements.in
+build==0.7.0
+    # via -r requirements.in
 click==8.1.2
     # via
     #   black
@@ -30,10 +32,14 @@ mypy-extensions==0.4.3
     # via
     #   black
     #   mypy
+packaging==21.3
+    # via build
 pathspec==0.9.0
     # via black
 pep517==0.12.0
-    # via pip-tools
+    # via
+    #   build
+    #   pip-tools
 pip_tools==6.4.0
     # via -r requirements.in
 platformdirs==2.5.1
@@ -46,11 +52,14 @@ pyflakes==2.4.0
     # via flake8
 pylint==2.12.2
     # via -r requirements.in
+pyparsing==3.0.8
+    # via packaging
 toml==0.10.2
     # via pylint
 tomli==2.0.1
     # via
     #   black
+    #   build
     #   mypy
     #   pep517
 typing-extensions==4.1.1

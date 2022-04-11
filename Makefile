@@ -44,4 +44,5 @@ install-dependencies:
 
 
 sdist:
-	python setup.py sdist
+	python3 -m build
+	# python setup.py sdist
