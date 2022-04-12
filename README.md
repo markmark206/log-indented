@@ -38,7 +38,9 @@ def count_sheep() -> int:
 
 @logged(logger)
 def count_barnyard_animinals() -> int:
-    return count_birds() + count_goats() + count_sheep()
+    total_animal_count: int = count_birds() + count_goats() + count_sheep()
+    log_info(f"total barnyard animals: {total_animal_count}")
+    return total_animal_count
 ```
 
 will produce output similar to this:
@@ -47,13 +49,14 @@ will produce output similar to this:
     + count_barnyard_animinals: enter
         + count_birds: enter
             + count_chicken: enter
-            - count_chicken: exit. took 500.9 ms.
+            - count_chicken: exit. took 0.00 ms.
             + count_ducks: enter
-            - count_ducks: exit. took 501.0 ms.
-        - count_birds: exit. took 501.0 ms.
+            - count_ducks: exit. took 0.00 ms.
+        - count_birds: exit. took 0.07 ms.
         + count_goats: enter
-        - count_goats: exit. took 501.0 ms.
+        - count_goats: exit. took 0.00 ms.
         + count_sheep: enter
-        - count_sheep: exit. took 501.1 ms.
-    - count_barnyard_animinals: exit. took 501.1 ms.
+        - count_sheep: exit. took 0.00 ms.
+      count_barnyard_animinals: total barnyard animals: 17
+    - count_barnyard_animinals: exit. took 0.18 ms.
 ```

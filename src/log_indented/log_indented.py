@@ -109,8 +109,7 @@ class LoggedBlock:
     def __enter__(self):  # type: ignore
         IndentedLog.indentations.push_logger(self.logger, self.name)
         IndentedLog.info(False, f"{PREFIX_ENTER}{self.name}: enter")
-        # self.logger.info(self.name + ": enter")
-        self.start_time = int(time.time())
+        self.start_time = time.time()
         return self
 
     def __exit__(
@@ -118,7 +117,7 @@ class LoggedBlock:
     ) -> Literal[False]:
         duration: float = self.since_start() * 1000.0
         exception_text: str = f"exception: '{exc_type}' - '{exc_value}'" if exc_value else ""
-        message_str: str = f"{PREFIX_EXIT}{self.name}: exit. took {duration:,.1f} ms. {exception_text}"
+        message_str: str = f"{PREFIX_EXIT}{self.name}: exit. took {duration:,.2f} ms. {exception_text}"
         if exc_value:
             IndentedLog.info(False, message_str)
         else:
