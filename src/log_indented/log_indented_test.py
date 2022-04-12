@@ -57,11 +57,16 @@ def count_barnyard_animinals() -> int:
 
 
 @logged(logger)
+def compute_element() -> int:
+    time.sleep(0.1)
+    return 3
+
+
+@logged(logger)
 def compute_the_answer() -> int:
-    for i in range(10):
-        time.sleep(0.1)
-        log_info(f"{i}, computing the answer")
-    return 42
+    result: int = sum([compute_element() for x in range(10)])
+    log_info(f"result: {result}")
+    return result
 
 
 class TestLogIndented(unittest.TestCase):
@@ -130,21 +135,32 @@ class TestLogIndented(unittest.TestCase):
     def test_important_computation(self) -> None:
         with self.assertLogs() as captured:
             the_answer: int = compute_the_answer()
-            self.assertEqual(the_answer, 42)
+            self.assertEqual(the_answer, 30)
 
         self._validate_captured_logs(
             expected_lines=[
                 "    + compute_the_answer: enter",
-                "      compute_the_answer: 0, computing the answer",
-                "      compute_the_answer: 1, computing the answer",
-                "      compute_the_answer: 2, computing the answer",
-                "      compute_the_answer: 3, computing the answer",
-                "      compute_the_answer: 4, computing the answer",
-                "      compute_the_answer: 5, computing the answer",
-                "      compute_the_answer: 6, computing the answer",
-                "      compute_the_answer: 7, computing the answer",
-                "      compute_the_answer: 8, computing the answer",
-                "      compute_the_answer: 9, computing the answer",
+                "        + compute_element: enter",
+                "        - compute_element: exit. took ",
+                "        + compute_element: enter",
+                "        - compute_element: exit. took ",
+                "        + compute_element: enter",
+                "        - compute_element: exit. took ",
+                "        + compute_element: enter",
+                "        - compute_element: exit. took ",
+                "        + compute_element: enter",
+                "        - compute_element: exit. took ",
+                "        + compute_element: enter",
+                "        - compute_element: exit. took ",
+                "        + compute_element: enter",
+                "        - compute_element: exit. took ",
+                "        + compute_element: enter",
+                "        - compute_element: exit. took ",
+                "        + compute_element: enter",
+                "        - compute_element: exit. took ",
+                "        + compute_element: enter",
+                "        - compute_element: exit. took ",
+                "      compute_the_answer: result: 30",
                 "    - compute_the_answer: exit. took ",
             ],
             captured=captured,
