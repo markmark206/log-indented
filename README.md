@@ -2,11 +2,11 @@
 
 [![Python application](https://github.com/markmark206/log-indented/actions/workflows/python-test.yml/badge.svg)](https://github.com/markmark206/log-indented/actions/workflows/python-test.yml)
 
-This is a package for producing indented, easy to understand logs.
+This is a package for producing indented, human-friendly, easy to understand logs.
 
 Example:
 
-Executing count_barnyard_animinals() in this code example:
+Executing `count_barnyard_animinals()` in this code example:
 
 ```python
 from log_indented import logged, log_info
