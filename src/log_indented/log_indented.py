@@ -112,7 +112,7 @@ class LoggedBlock:
 
     def __enter__(self):  # type: ignore
         IndentedLog.push_logger(self.logger, self.name)
-        IndentedLog.info(False, f"{PREFIX_ENTER}{self.name}: enter")
+        IndentedLog.info(False, f"{PREFIX_ENTER}{self.name}: enter.")
         self.start_time = time.time()
         return self
 

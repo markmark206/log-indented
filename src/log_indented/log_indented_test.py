@@ -229,8 +229,6 @@ class TestLogIndented(unittest.TestCase):
             captured=captured,
         )
 
-        # self._validate_captured_logs(expected_lines, captured)
-
     def _validate_captured_logs(self, expected_lines: list[str], captured: _LoggingWatcher) -> None:
         self.assertEqual(len(captured.records), len(expected_lines))
         for index, expected_string in enumerate(expected_lines):

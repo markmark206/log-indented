@@ -6,9 +6,8 @@
 [![Python Package](https://github.com/markmark206/log-indented/actions/workflows/python-publish.yml/badge.svg)](https://github.com/markmark206/log-indented/actions/workflows/python-publish.yml)
 
 
-This is a package for producing indented, human-friendly, easy to understand logs.
+This package helps you and your code produce indented, human-friendly, easy to understand logs.
 
-Example:
 
 Executing `count_barnyard_animals()` in this code example:
 
