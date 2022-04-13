@@ -3,7 +3,7 @@
 
 # log-indented
 
-[![main](https://github.com/markmark206/log-indented/actions/workflows/python-test.yml/badge.svg)](https://github.com/markmark206/log-indented/actions/workflows/python-test.yml)
+[![Python Package](https://github.com/markmark206/log-indented/actions/workflows/python-publish.yml/badge.svg)](https://github.com/markmark206/log-indented/actions/workflows/python-publish.yml)
 
 
 This is a package for producing indented, human-friendly, easy to understand logs.
