@@ -1,6 +1,10 @@
+
+[![Support Ukraine Badge](https://bit.ly/support-ukraine-now)](https://github.com/support-ukraine/support-ukraine#support-financially)
+
 # log-indented
 
-[![Python application](https://github.com/markmark206/log-indented/actions/workflows/python-test.yml/badge.svg)](https://github.com/markmark206/log-indented/actions/workflows/python-test.yml)
+[![main](https://github.com/markmark206/log-indented/actions/workflows/python-test.yml/badge.svg)](https://github.com/markmark206/log-indented/actions/workflows/python-test.yml)
+
 
 This is a package for producing indented, human-friendly, easy to understand logs.
 
