@@ -73,6 +73,10 @@ class IndentedLog:
         IndentedLog.indentations.push_logger(slogger, name)
 
     @staticmethod
+    def pop_logger() -> None:
+        IndentedLog.indentations.pop_logger()
+
+    @staticmethod
     def info(with_prefix: bool, *args: Any) -> None:
         log_string, logger_to_use = IndentedLog.prepare_compose_log(with_prefix, *args)
         logger_to_use.info(log_string)
@@ -107,7 +111,7 @@ class LoggedBlock:
         self.logger: logging.Logger = flogger
 
     def __enter__(self):  # type: ignore
-        IndentedLog.indentations.push_logger(self.logger, self.name)
+        IndentedLog.push_logger(self.logger, self.name)
         IndentedLog.info(False, f"{PREFIX_ENTER}{self.name}: enter")
         self.start_time = time.time()
         return self
@@ -122,7 +126,7 @@ class LoggedBlock:
             IndentedLog.info(False, message_str)
         else:
             IndentedLog.info(False, message_str)
-        IndentedLog.indentations.pop_logger()
+        IndentedLog.pop_logger()
         return False
 
     def since_start(self) -> float:

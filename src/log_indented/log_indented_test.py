@@ -6,7 +6,7 @@ import time
 import logging
 
 # pylint: disable=no-name-in-module
-from log_indented import logged, log_info, LoggedBlock  # type: ignore
+from log_indented import logged, log_info, log_warn, log_error, LoggedBlock  # type: ignore
 
 logger = logging.getLogger(__name__)
 logger.level = logging.DEBUG
@@ -83,6 +83,69 @@ class TestLogIndented(unittest.TestCase):
         self._f_level_2()
         # pylint: disable=redundant-unittest-assert
         self.assertTrue(True)
+
+    def test_with_default_logger(self) -> None:
+        @logged()
+        def somefunction() -> None:
+            log_info("testing")
+
+        with self.assertLogs() as captured:
+            somefunction()
+
+        self._validate_captured_logs(
+            expected_lines=[
+                "+ TestLogIndented.test_with_default_logger.<locals>.somefunction: enter",
+                "  TestLogIndented.test_with_default_logger.<locals>.somefunction: testing",
+                "- TestLogIndented.test_with_default_logger.<locals>.somefunction: exit. took ",
+            ],
+            captured=captured,
+        )
+
+    def test_log_types(self) -> None:
+        with self.assertLogs() as captured:
+            log_info("info")
+            log_warn("warning")
+            log_error("error")
+
+        self._validate_captured_logs(
+            expected_lines=[
+                "info",
+                "warning",
+                "error",
+            ],
+            captured=captured,
+        )
+
+    def test_exception(self) -> None:
+        @logged(logger)
+        def raises_exception() -> None:
+            raise RuntimeError("something bad happened")
+
+        with self.assertLogs() as captured:
+            with self.assertRaises(RuntimeError):
+                raises_exception()
+
+        self._validate_captured_logs(
+            expected_lines=[
+                "+ TestLogIndented.test_exception.<locals>.raises_exception: enter",
+                "- TestLogIndented.test_exception.<locals>.raises_exception: exit. "
+                "took 0.00 ms. exception: '<class 'RuntimeError'>' - 'something bad happened'",
+            ],
+            captured=captured,
+        )
+
+    def test_not_logged(self) -> None:
+        with self.assertLogs() as captured:
+            logger.info("chickens!")
+            log_info("ducks")
+
+        self._validate_captured_logs(
+            expected_lines=[
+                "chickens!",
+                "ducks",
+            ],
+            captured=captured,
+        )
 
     @logged(logger)
     def test_basic(self) -> None:

@@ -1,6 +1,6 @@
 .PHONY: test sdist bdist_wheel_linux bdist_windows
 
-MIN_COVERAGE_PERCENTAGE=94
+MIN_COVERAGE_PERCENTAGE=99
 
 VENV_PATH=${PWD}/.py-env
 
