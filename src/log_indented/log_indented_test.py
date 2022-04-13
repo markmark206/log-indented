@@ -50,7 +50,7 @@ def count_sheep() -> int:
 
 
 @logged(logger)
-def count_barnyard_animinals() -> int:
+def count_barnyard_animals() -> int:
     total_animal_count: int = count_birds() + count_goats() + count_sheep()
     log_info(f"total barnyard animals: {total_animal_count}")
     return total_animal_count
@@ -110,11 +110,11 @@ class TestLogIndented(unittest.TestCase):
     @logged(logger)
     def test_count_animals(self) -> None:
         with self.assertLogs() as captured:
-            animal_count: int = count_barnyard_animinals()
+            animal_count: int = count_barnyard_animals()
             self.assertEqual(animal_count, 17)
         self._validate_captured_logs(
             expected_lines=[
-                "    + count_barnyard_animinals: enter",
+                "    + count_barnyard_animals: enter",
                 "        + count_birds: enter",
                 "            + count_chicken: enter",
                 "            - count_chicken: exit. took ",
@@ -125,8 +125,8 @@ class TestLogIndented(unittest.TestCase):
                 "        - count_goats: exit. took ",
                 "        + count_sheep: enter",
                 "        - count_sheep: exit. took ",
-                "      count_barnyard_animinals: total barnyard animals: 17",
-                "    - count_barnyard_animinals: exit. took ",
+                "      count_barnyard_animals: total barnyard animals: 17",
+                "    - count_barnyard_animals: exit. took ",
             ],
             captured=captured,
         )

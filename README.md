@@ -6,7 +6,7 @@ This is a package for producing indented, human-friendly, easy to understand log
 
 Example:
 
-Executing `count_barnyard_animinals()` in this code example:
+Executing `count_barnyard_animals()` in this code example:
 
 ```python
 from log_indented import logged, log_info
@@ -37,7 +37,7 @@ def count_sheep() -> int:
 
 
 @logged(logger)
-def count_barnyard_animinals() -> int:
+def count_barnyard_animals() -> int:
     total_animal_count: int = count_birds() + count_goats() + count_sheep()
     log_info(f"total barnyard animals: {total_animal_count}")
     return total_animal_count
@@ -46,7 +46,7 @@ def count_barnyard_animinals() -> int:
 will produce output similar to this:
 
 ```
-    + count_barnyard_animinals: enter
+    + count_barnyard_animals: enter
         + count_birds: enter
             + count_chicken: enter
             - count_chicken: exit. took 0.00 ms.
@@ -57,6 +57,6 @@ will produce output similar to this:
         - count_goats: exit. took 0.00 ms.
         + count_sheep: enter
         - count_sheep: exit. took 0.00 ms.
-      count_barnyard_animinals: total barnyard animals: 17
-    - count_barnyard_animinals: exit. took 0.18 ms.
+      count_barnyard_animals: total barnyard animals: 17
+    - count_barnyard_animals: exit. took 0.18 ms.
 ```
